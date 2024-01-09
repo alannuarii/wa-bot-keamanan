@@ -16,7 +16,7 @@ const getData = async (client) => {
 
         // Mengonsumsi pesan dari queue
         console.log('Mengonsumsi pesan dari queue...');
-        channel.consume(`${process.env.QUEUE}`, (message) => {
+        channel.consume('tamu', (message) => {
             data = JSON.parse(message.content.toString())
 
             if (data.item === 'tamu') {
