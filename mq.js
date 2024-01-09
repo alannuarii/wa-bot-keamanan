@@ -1,4 +1,5 @@
 const amqp = require('amqplib')
+const { toGroup, toGuest } = require('./controller/tamu')
 require("dotenv").config();
 
 const getData = async (client) => {
@@ -16,8 +17,12 @@ const getData = async (client) => {
         // Mengonsumsi pesan dari queue
         console.log('Mengonsumsi pesan dari queue...');
         channel.consume(`${process.env.QUEUE}`, (message) => {
-            data = message.content.toString()
-            client.sendMessage(`${process.env.ID_WA}`, data);
+            data = JSON.parse(message.content.toString())
+
+            if (data.item === 'tamu') {
+                toGroup(client, data)
+                toGuest(client, data)
+            }
         }, { noAck: true })
 
         // Menampilkan informasi bahwa aplikasi telah terhubung saat dijalankan
