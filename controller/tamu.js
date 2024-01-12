@@ -1,7 +1,7 @@
 const { formatPhoneNumber } = require('../utils')
 require("dotenv").config();
 
-const id = process.env.ID_WA
+const id = process.env.WAG_PLTD
 
 const toGroup = (client, data) => {
     const message = `*Informasi Tamu*

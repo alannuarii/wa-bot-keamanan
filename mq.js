@@ -1,5 +1,6 @@
 const amqp = require('amqplib')
 const { toGroup, toGuest } = require('./controller/tamu')
+const { toAdmin } = require('./controller/presensi')
 require("dotenv").config();
 
 const getData = async (client) => {
@@ -17,11 +18,13 @@ const getData = async (client) => {
         // Mengonsumsi pesan dari queue
         console.log('Mengonsumsi pesan dari queue...');
         channel.consume('tamu', (message) => {
-            data = JSON.parse(message.content.toString())
+            const data = JSON.parse(message.content.toString())
 
             if (data.item === 'tamu') {
                 toGroup(client, data)
                 toGuest(client, data)
+            } else if (data.item === 'presensi') {
+                toAdmin(client, data)
             }
         }, { noAck: true })
 
